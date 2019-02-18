@@ -22,20 +22,24 @@ crystal run src/learner.cr
 
 ### API
 
-Every input must be `Float64`. Either input, output or category must be a vector, aka `Array(Float64)`.
+Every value must be castable as `Float64`. Either input, output or category must be castable as a vector, aka `Array(Float64)`. Pass your query params in JSON format.
 
 `POST /:machine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE`
+
 Upload a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns.
 
 `PATCH /:machine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE`
+
 Append your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns.
 
 `GET /:machine_id/run?value=VALUE`
+
 Run your machine with your `VALUE`.
 
 `GET /:machine_id/classifiy?value=VALUE&categories=CATEGORIES`
+
 Classify your `VALUE` in the `CATEGORIES` you provided.
 
 

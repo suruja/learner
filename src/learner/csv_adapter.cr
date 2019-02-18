@@ -14,7 +14,6 @@ class Learner::CSVAdapter
       separator: ';',
     )
     @data = parser.parse.map do |line|
-      puts line
       vectors = [
         line[0...input_size],
         line[input_size...(input_size + output_size)],

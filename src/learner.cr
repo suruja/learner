@@ -34,7 +34,6 @@ module Learner
           end
           adapter.run
           learner.training_data = adapter.data
-          puts learner.training_data
           learner.build
           learner.train
           learner.save

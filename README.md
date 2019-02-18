@@ -22,7 +22,7 @@ crystal run src/learner.cr
 
 ### API
 
-Every value must be castable as `Float64`. Either input, output or category must be castable as a vector, aka `Array(Float64)`. Pass your query params in JSON format.
+Every value must be castable to `Float64`. Either input, output or category must be castable to a vector, aka `Array(Float64)`. Pass your query params in JSON format.
 
 -----------------
 

@@ -96,39 +96,3 @@ get "/:machine_id/classify" do |env|
 end
 
 Kemal.run
-
-# learner = Learner::Machine.new("akinator.nn")
-
-# # if learner.persisted?
-# #   learner.load
-# # else
-
-# learner.training_data = [
-#   [[1.0, 0.0, 0.0, 0.0, 0.0], [0.0]],
-#   [[0.0, 1.0, 0.0, 0.0, 0.0], [0.25]],
-#   [[0.0, 0.0, 1.0, 0.0, 0.0], [0.5]],
-#   [[0.0, 0.0, 0.0, 1.0, 0.0], [0.75]],
-#   [[0.0, 0.0, 0.0, 0.0, 1.0], [1.0]],
-# ]
-
-# learner.build
-# learner.train
-# # learner.save
-# # end
-
-# learner.categories = [0.0, 0.25, 0.5, 0.75, 1.0]
-
-# puts learner.training_data
-
-# c = learner.classify([1.0, 0.0, 0.0, 0.0, 0.0])
-# puts [c.category, c.confidence].to_json
-# c = learner.classify([0.0, 1.0, 0.0, 0.0, 0.0])
-# puts [c.category, c.confidence].to_json
-# c = learner.classify([0.0, 0.0, 1.0, 0.0, 0.0])
-# puts [c.category, c.confidence].to_json
-# c = learner.classify([0.0, 0.0, 0.0, 1.0, 0.0])
-# puts [c.category, c.confidence].to_json
-# c = learner.classify([0.0, 0.0, 0.0, 0.0, 1.0])
-# puts [c.category, c.confidence].to_json
-# c = learner.classify([1.0, 0.0, 0.0, 1.0, 1.0])
-# puts [c.category, c.confidence].to_json

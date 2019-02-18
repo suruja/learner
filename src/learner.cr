@@ -23,23 +23,28 @@ module Learner
         output_size: env.params.query.fetch("output_size", 1).to_i32,
       )
 
+      result = ({} of Symbol => String).to_json
+
       HTTP::FormData.parse(env.request) do |upload|
         filename = upload.filename
         # Be sure to check if file.filename is not empty otherwise it'll raise a compile time error
         if !filename.is_a?(String)
-          {error: "No filename included in upload"}.to_json
+          result = {error: "No filename included in upload"}.to_json
         else
           File.open(adapter.path, (method == "PATCH" ? "a" : "w")) do |f|
             IO.copy(upload.body, f)
+            f.puts "\n"
           end
           adapter.run
           learner.training_data = adapter.data
           learner.build
           learner.train
           learner.save
-          {body: "Upload OK"}.to_json
+          result = {body: "Upload OK"}.to_json
         end
       end
+
+      result
     end
 
     def self.post(env)

@@ -1,102 +1,45 @@
 require "kemal"
-require "./learner/json"
-require "./learner/machine"
-require "./learner/csv_adapter"
-require "./learner/classifier"
+require "./learner/engine"
+require "./learner/web"
 
-module Learner
-  VERSION = "0.1.0"
+add_handler Learner::Web::ErrorHandler.new
 
-  alias Vector = Array(Float64)
-  alias Vectors = Array(Vector)
-
-  class Web
-    def self.upload(env, method)
-      env.response.content_type = "application/json"
-
-      machine_id = env.params.url["machine_id"].as(String)
-      learner = Learner::Machine.new(machine_id)
-
-      adapter = Learner::CSVAdapter.new(
-        filename: machine_id,
-        input_size: env.params.query.fetch("input_size", 2).to_i32,
-        output_size: env.params.query.fetch("output_size", 1).to_i32,
-      )
-
-      result = ({} of Symbol => String).to_json
-
-      HTTP::FormData.parse(env.request) do |upload|
-        filename = upload.filename
-        # Be sure to check if file.filename is not empty otherwise it'll raise a compile time error
-        if !filename.is_a?(String)
-          result = {error: "No filename included in upload"}.to_json
-        else
-          File.open(adapter.path, (method == "PATCH" ? "a" : "w")) do |f|
-            IO.copy(upload.body, f)
-            f.puts "\n"
-          end
-          adapter.run
-          learner.training_data = adapter.data
-          learner.build
-          learner.train
-          learner.save
-          result = {body: "Upload OK"}.to_json
-        end
-      end
-
-      result
-    end
-
-    def self.post(env)
-      upload(env, "POST")
-    end
-
-    def self.patch(env)
-      upload(env, "PATCH")
-    end
-  end
+before_all do |env|
+  puts "Setting response content type"
+  env.response.content_type = "application/json"
 end
 
 post "/:machine_id/upload" do |env|
-  Learner::Web.post(env)
+  Learner::Web::Helpers.post_upload(env)
 end
 
 patch "/:machine_id/upload" do |env|
-  Learner::Web.patch(env)
+  Learner::Web::Helpers.patch_upload(env)
 end
 
 get "/:machine_id/run" do |env|
-  env.response.content_type = "application/json"
-
   machine_id = env.params.url["machine_id"].as(String)
-  learner = Learner::Machine.new(machine_id)
-  if learner.persisted?
-    learner.load
-    value = Learner::JSON.new(env.params.query.fetch("value", "[]")).to_vector
-    {value: learner.run(value)}.to_json
-  else
-    {error: "No data"}.to_json
-  end
+  learner = Learner::Engine::Base.new(machine_id)
+  learner.load
+  query_value = env.params.query.fetch("value", "[]")
+  value = Learner::Engine::JSON.new(query_value).to_vector
+  {value: learner.run(value)}.to_json
 end
 
 get "/:machine_id/classify" do |env|
-  env.response.content_type = "application/json"
-
   machine_id = env.params.url["machine_id"].as(String)
-  categories = Learner::JSON.new(env.params.query.fetch("categories", "[]")).to_vectors
-  learner = Learner::Machine.new(machine_id)
-  learner.categories = categories.as(Learner::Vectors)
-  if learner.persisted?
-    learner.load
-    value = Learner::JSON.new(env.params.query.fetch("value", "[]")).to_vector
-    classifier = learner.classify(value)
-    {
-      value:      classifier.category,
-      confidence: classifier.confidence,
-    }.to_json
-  else
-    {error: "No data"}.to_json
-  end
+  query_categories = env.params.query.fetch("categories", "[]")
+  categories = Learner::Engine::JSON.new(query_categories).to_vectors
+  learner = Learner::Engine::Base.new(machine_id)
+  learner.categories = categories
+  learner.load
+  query_value = env.params.query.fetch("value", "[]")
+  value = Learner::Engine::JSON.new(query_value).to_vector
+  classifier = learner.classify(value)
+  {
+    value:      classifier.category,
+    confidence: classifier.confidence,
+  }.to_json
 end
 
 Kemal.run

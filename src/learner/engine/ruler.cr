@@ -1,6 +1,6 @@
-class Learner::Ruler
-  property a : Learner::Vector
-  property b : Learner::Vector
+class Learner::Engine::Ruler
+  property a : Vector
+  property b : Vector
 
   def initialize(@a, @b)
   end

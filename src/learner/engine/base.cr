@@ -1,14 +1,14 @@
 require "shainet"
 
-class Learner::Machine
-  property training_data : Array(Learner::Vectors)
+class Learner::Engine::Base
+  property training_data : Array(Vectors)
   property network : SHAInet::Network
   property learning_rate : Float64
   property momentum : Float64
   property filename : String
-  property categories : Learner::Vectors?
+  property categories : Vectors?
 
-  def initialize(@filename, @training_data = [] of Learner::Vectors)
+  def initialize(@filename, @training_data = Array(Vectors).new)
     @learning_rate = 0.7
     @momentum = 0.3
     @network = SHAInet::Network.new
@@ -46,7 +46,7 @@ class Learner::Machine
       log_each: 1000)
   end
 
-  def run(value : Learner::Vector) : Learner::Vector
+  def run(value : Vector) : Vector
     network.run(value)
   end
 
@@ -55,6 +55,7 @@ class Learner::Machine
   end
 
   def load
+    raise FileNotFound.new unless persisted?
     network.load_from_file(path)
   end
 
@@ -66,11 +67,11 @@ class Learner::Machine
     "./saves/#{filename}.nn"
   end
 
-  def classify(value : Learner::Vector)
+  def classify(value : Vector)
     result = run(value)
-    classifier = Learner::Classifier.new(
+    classifier = Classifier.new(
       value: result,
-      categories: categories.as(Learner::Vectors),
+      categories: categories.as(Vectors),
     )
     classifier.run
     classifier

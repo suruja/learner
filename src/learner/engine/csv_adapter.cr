@@ -1,11 +1,11 @@
-class Learner::CSVAdapter
+class Learner::Engine::CSVAdapter
   property filename : String
-  property data : Array(Learner::Vectors)
+  property data : Array(Vectors)
   property input_size : Int32
   property output_size : Int32
 
   def initialize(@filename, @input_size, @output_size)
-    @data = Array(Learner::Vectors).new
+    @data = Array(Vectors).new
   end
 
   def run

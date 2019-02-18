@@ -1,0 +1,19 @@
+name: learner
+version: 0.1.0
+
+authors:
+  - suruja <sebstp@gmail.com>
+
+targets:
+  learner:
+    main: src/learner.cr
+
+crystal: 0.27.2
+
+dependencies:
+  shainet:
+    github: NeuraLegion/shainet
+  kemal:
+    github: kemalcr/kemal
+
+license: MIT

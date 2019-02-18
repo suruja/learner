@@ -18,24 +18,19 @@ patch "/:machine_id/upload" do |env|
 end
 
 get "/:machine_id/run" do |env|
-  machine_id = env.params.url["machine_id"].as(String)
-  learner = Learner::Engine::Base.new(machine_id)
-  learner.load
-  query_value = env.params.query.fetch("value", "[]")
-  value = Learner::Engine::JSON.new(query_value).to_vector
-  {value: learner.run(value)}.to_json
+  value = Learner::Engine.run(
+    machine_id: env.params.url["machine_id"].as(String),
+    value: env.params.query.fetch("value", "[]"),
+  )
+  {value: value}.to_json
 end
 
 get "/:machine_id/classify" do |env|
-  machine_id = env.params.url["machine_id"].as(String)
-  query_categories = env.params.query.fetch("categories", "[]")
-  categories = Learner::Engine::JSON.new(query_categories).to_vectors
-  learner = Learner::Engine::Base.new(machine_id)
-  learner.categories = categories
-  learner.load
-  query_value = env.params.query.fetch("value", "[]")
-  value = Learner::Engine::JSON.new(query_value).to_vector
-  classifier = learner.classify(value)
+  classifier = Learner::Engine.classify(
+    machine_id: env.params.url["machine_id"].as(String),
+    value: env.params.query.fetch("value", "[]"),
+    categories: env.params.query.fetch("categories", "[]"),
+  )
   {
     value:      classifier.category,
     confidence: classifier.confidence,

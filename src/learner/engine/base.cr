@@ -8,7 +8,7 @@ class Learner::Engine::Base
   property filename : String
   property categories : Vectors?
 
-  def initialize(@filename, @training_data = Array(Vectors).new)
+  def initialize(@filename, @training_data = Array(Vectors).new, @categories = nil)
     @learning_rate = 0.7
     @momentum = 0.3
     @network = SHAInet::Network.new

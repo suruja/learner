@@ -19,12 +19,12 @@ module Learner::Engine
   end
 
   def classify(machine_id : String, value : String, categories : String) : Classifier
-    learner = Learner::Engine::Base.new(
-      filename: machine_id,
-      categories: Learner::Engine::JSON.new(categories).to_vectors,
-    )
+    learner = Learner::Engine::Base.new(machine_id)
     learner.load
     vector = Learner::Engine::JSON.new(value).to_vector
-    learner.classify(vector)
+    learner.classify(
+      value: vector,
+      categories: Learner::Engine::JSON.new(categories).to_vectors,
+    )
   end
 end

@@ -6,9 +6,8 @@ class Learner::Engine::Base
   property learning_rate : Float64
   property momentum : Float64
   property filename : String
-  property categories : Vectors?
 
-  def initialize(@filename, @training_data = Array(Vectors).new, @categories = nil)
+  def initialize(@filename, @training_data = Array(Vectors).new)
     @learning_rate = 0.7
     @momentum = 0.3
     @network = SHAInet::Network.new
@@ -67,11 +66,11 @@ class Learner::Engine::Base
     "./saves/#{filename}.nn"
   end
 
-  def classify(value : Vector)
+  def classify(value : Vector, categories : Vectors)
     result = run(value)
     classifier = Classifier.new(
       value: result,
-      categories: categories.as(Vectors),
+      categories: categories,
     )
     classifier.run
     classifier

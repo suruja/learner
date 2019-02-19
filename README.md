@@ -26,34 +26,44 @@ Every value must be castable to `Float64`. Either input, output or category must
 
 -----------------
 
-`POST /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE`
+```crystal
+POST /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE
+```
 
 Upload a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns. Once your CSV file is successfully processed, you will get a token.
 
 -----------------
 
-`PATCH /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN`
+```crystal
+PATCH /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
+```
 
 Append your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
 
 -----------------
 
-`PUT /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN`
+```crystal
+PUT /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
+```
 
 Replace your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
 
 -----------------
 
-`GET /:engine_id/run?value=VALUE`
+```crystal
+GET /:engine_id/run?value=VALUE
+```
 
 Run your engine with your `VALUE`.
 
 -----------------
 
-`GET /:engine_id/classifiy?value=VALUE&categories=CATEGORIES`
+```crystal
+GET /:engine_id/classifiy?value=VALUE&categories=CATEGORIES
+```
 
 Classify your `VALUE` in the `CATEGORIES` you provided.
 

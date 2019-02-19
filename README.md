@@ -58,6 +58,13 @@ Run your engine with your `VALUE`.
 Classify your `VALUE` in the `CATEGORIES` you provided.
 
 
+## Specs
+
+```
+KEMAL_ENV=test crystal spec
+```
+
+
 ## Contributing
 
 1. Fork it (<https://github.com/suruja/learner/fork>)

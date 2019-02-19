@@ -23,6 +23,7 @@ class Learner::Web::Helpers
       filename = upload.filename
       # Be sure to check if file.filename is not empty otherwise it'll raise a compile time error
       if !filename.is_a?(String)
+        env.response.status_code = 406
         result = {error: "No filename included in upload"}.to_json
       else
         if ((method == "PATCH") || (method == "PUT")) && !File.exists?(adapter.path)
@@ -39,6 +40,7 @@ class Learner::Web::Helpers
         learner.build
         learner.train
         learner.save
+        env.response.status_code = (method == "POST") ? 201 : 202
         result = {body: "Upload OK", token: token.secret}.to_json
       end
     end

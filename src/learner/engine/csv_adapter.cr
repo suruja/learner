@@ -13,20 +13,23 @@ class Learner::Engine::CSVAdapter
       string_or_io: File.read(path),
       separator: ';',
     )
-    @data = parser.parse.map do |line|
-      vectors = [
-        line[0...input_size],
-        line[input_size...(input_size + output_size)],
-      ]
-      vectors.map do |vector|
-        vector.map do |coord|
-          coord.to_f
+    @data = parser.parse.reduce(Array(Vectors).new) do |memo, line|
+      if line.size > 0
+        vectors = [
+          line[0...input_size],
+          line[input_size...(input_size + output_size)],
+        ]
+        memo << vectors.map do |vector|
+          vector.map do |coord|
+            coord.to_f
+          end
         end
       end
+      memo
     end
   end
 
   def path
-    "./uploads/#{filename}.csv"
+    "#{ROOT_PATH}/uploads/#{filename}.csv"
   end
 end

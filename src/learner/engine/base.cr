@@ -63,7 +63,7 @@ class Learner::Engine::Base
   end
 
   def path
-    "./saves/#{filename}.nn"
+    "#{ROOT_PATH}/saves/#{filename}.nn"
   end
 
   def classify(value : Vector, categories : Vectors)

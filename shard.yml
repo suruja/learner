@@ -15,5 +15,7 @@ dependencies:
     github: NeuraLegion/shainet
   kemal:
     github: kemalcr/kemal
+  spec-kemal:
+    github: kemalcr/spec-kemal
 
 license: MIT

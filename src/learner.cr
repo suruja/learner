@@ -13,6 +13,10 @@ post "/:engine_id/upload" do |env|
   Learner::Web::Helpers.post_upload(env)
 end
 
+put "/:engine_id/upload" do |env|
+  Learner::Web::Helpers.put_upload(env)
+end
+
 patch "/:engine_id/upload" do |env|
   Learner::Web::Helpers.patch_upload(env)
 end

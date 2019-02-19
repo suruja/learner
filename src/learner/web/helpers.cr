@@ -9,7 +9,7 @@ class Learner::Web::Helpers
 
     token = Token.new(
       value: engine_id,
-      secret: (method == "PATCH") ? nil : env.params.query.fetch("token", nil),
+      secret: (method == "POST") ? nil : env.params.query.fetch("token", nil),
     )
     adapter = Learner::Engine::CSVAdapter.new(
       filename: token.to_s,
@@ -25,9 +25,9 @@ class Learner::Web::Helpers
       if !filename.is_a?(String)
         result = {error: "No filename included in upload"}.to_json
       else
-        if (method == "PATCH") && !File.exists?(adapter.path)
+        if ((method == "PATCH") || (method == "PUT")) && !File.exists?(adapter.path)
           raise Learner::Engine::FileNotFound.new
-        elsif (method == "POST") && File.exists?(adapter.path)
+        elsif (method == "POST") && File.exists?(learner.path)
           raise Learner::Engine::IdAlreadyTaken.new
         end
         File.open(adapter.path, (method == "PATCH" ? "a" : "w")) do |f|
@@ -48,6 +48,10 @@ class Learner::Web::Helpers
 
   def self.post_upload(env)
     upload(env, "POST")
+  end
+
+  def self.put_upload(env)
+    upload(env, "PUT")
   end
 
   def self.patch_upload(env)

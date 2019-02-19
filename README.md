@@ -40,6 +40,13 @@ in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as quer
 
 -----------------
 
+`PUT /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN`
+
+Replace your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
+in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
+
+-----------------
+
 `GET /:engine_id/run?value=VALUE`
 
 Run your engine with your `VALUE`.

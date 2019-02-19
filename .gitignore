@@ -3,6 +3,6 @@
 /bin/
 /.shards/
 *.dwarf
-/saves/
-/uploads/
+/data/saves/*
+/data/uploads/*
 learner

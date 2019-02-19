@@ -7,7 +7,7 @@ module Learner::Engine
   extend self
 
   ROOT_PATH = File.expand_path(
-    ENV.fetch("KEMAL_ENV", "development") == "test" ? "#{__DIR__}/../../spec" : "#{__DIR__}/../.."
+    ENV.fetch("KEMAL_ENV", "development") == "test" ? "#{__DIR__}/../../spec" : "#{__DIR__}/../../data"
   )
 
   alias Vector = Array(Float64)

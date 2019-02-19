@@ -4,7 +4,7 @@ helper = SpecHelper.new(
   engine_id: "hello",
   input_size: 2,
   output_size: 1,
-  filepath: "#{Learner::Engine::ROOT_PATH}/fixtures/xor.csv",
+  filepath: File.expand_path("#{Learner::Engine::ROOT_PATH}/fixtures/xor.csv"),
 )
 
 helper.encapsulate do

@@ -11,15 +11,17 @@ module Learner::Engine
 
   class FileNotFound < ::Exception; end
 
-  def run(machine_id : String, value : String) : Vector
-    learner = Learner::Engine::Base.new(machine_id)
+  class IdAlreadyTaken < ::Exception; end
+
+  def run(engine_id : String, value : String) : Vector
+    learner = Learner::Engine::Base.new(engine_id)
     learner.load
     vector = Learner::Engine::JSON.new(value).to_vector
     learner.run(vector)
   end
 
-  def classify(machine_id : String, value : String, categories : String) : Classifier
-    learner = Learner::Engine::Base.new(machine_id)
+  def classify(engine_id : String, value : String, categories : String) : Classifier
+    learner = Learner::Engine::Base.new(engine_id)
     learner.load
     vector = Learner::Engine::JSON.new(value).to_vector
     learner.classify(

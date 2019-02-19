@@ -1,12 +1,18 @@
+require "./token"
+
 class Learner::Web::Helpers
   def self.upload(env, method)
     env.response.content_type = "application/json"
 
-    machine_id = env.params.url["machine_id"].as(String)
-    learner = Learner::Engine::Base.new(machine_id)
+    engine_id = env.params.url["engine_id"].as(String)
+    learner = Learner::Engine::Base.new(engine_id)
 
+    token = Token.new(
+      value: engine_id,
+      secret: (method == "PATCH") ? nil : env.params.query.fetch("token", nil),
+    )
     adapter = Learner::Engine::CSVAdapter.new(
-      filename: machine_id,
+      filename: token.to_s,
       input_size: env.params.query.fetch("input_size", 2).to_i32,
       output_size: env.params.query.fetch("output_size", 1).to_i32,
     )
@@ -19,6 +25,11 @@ class Learner::Web::Helpers
       if !filename.is_a?(String)
         result = {error: "No filename included in upload"}.to_json
       else
+        if (method == "PATCH") && !File.exists?(adapter.path)
+          raise Learner::Engine::FileNotFound.new
+        elsif (method == "POST") && File.exists?(adapter.path)
+          raise Learner::Engine::IdAlreadyTaken.new
+        end
         File.open(adapter.path, (method == "PATCH" ? "a" : "w")) do |f|
           IO.copy(upload.body, f)
           f.puts "\n"
@@ -28,7 +39,7 @@ class Learner::Web::Helpers
         learner.build
         learner.train
         learner.save
-        result = {body: "Upload OK"}.to_json
+        result = {body: "Upload OK", token: token.secret}.to_json
       end
     end
 

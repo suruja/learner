@@ -62,7 +62,7 @@ Run your engine with your `VALUE`.
 -----------------
 
 ```crystal
-GET /:engine_id/classifiy?value=VALUE&categories=CATEGORIES
+GET /:engine_id/classify?value=VALUE&categories=CATEGORIES
 ```
 
 Classify your `VALUE` in the `CATEGORIES` you provided.

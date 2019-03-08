@@ -30,7 +30,7 @@ Every value must be castable to `Float64`. Either input, output or category must
 POST /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE
 ```
 
-Upload a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
+Upload a CSV (using ';' as separator) file containing one row per data item, of `INPUT_SIZE` columns, resulting output
 in the last `OUTPUT_SIZE` columns. Once your CSV file is successfully processed, you will get a token.
 
 -----------------

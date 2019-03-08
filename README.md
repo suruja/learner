@@ -26,7 +26,7 @@ Every value must be castable to `Float64`. Either input, output or category must
 
 -----------------
 
-```crystal
+```
 POST /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE
 ```
 
@@ -35,7 +35,7 @@ in the last `OUTPUT_SIZE` columns. Once your CSV file is successfully processed,
 
 -----------------
 
-```crystal
+```
 PATCH /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
@@ -44,7 +44,7 @@ in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as quer
 
 -----------------
 
-```crystal
+```
 PUT /:engine_id/upload?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
@@ -53,7 +53,15 @@ in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as quer
 
 -----------------
 
-```crystal
+```
+DELETE /:engine_id?token=TOKEN
+```
+
+Destroy your engine. You must provide the creation `TOKEN` as query parameter.
+
+-----------------
+
+```
 GET /:engine_id/run?value=VALUE
 ```
 
@@ -61,7 +69,7 @@ Run your engine with your `VALUE`.
 
 -----------------
 
-```crystal
+```
 GET /:engine_id/classify?value=VALUE&categories=CATEGORIES
 ```
 

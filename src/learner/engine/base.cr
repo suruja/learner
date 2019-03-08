@@ -63,6 +63,10 @@ class Learner::Engine::Base
   end
 
   def path
+    self.class.path(filename)
+  end
+
+  def self.path(filename)
     "#{ROOT_PATH}/saves/#{filename}.nn"
   end
 

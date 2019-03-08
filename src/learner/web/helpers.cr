@@ -2,8 +2,6 @@ require "./token"
 
 class Learner::Web::Helpers
   def self.upload(env, method)
-    env.response.content_type = "application/json"
-
     engine_id = env.params.url["engine_id"].as(String)
     learner = Learner::Engine::Base.new(engine_id)
 
@@ -26,15 +24,17 @@ class Learner::Web::Helpers
         env.response.status_code = 406
         result = {error: "No filename included in upload"}.to_json
       else
-        if ((method == "PATCH") || (method == "PUT")) && !File.exists?(adapter.path)
-          raise Learner::Engine::FileNotFound.new
-        elsif (method == "POST") && File.exists?(learner.path)
-          raise Learner::Engine::IdAlreadyTaken.new
-        end
-        File.open(adapter.path, (method == "PATCH" ? "a" : "w")) do |f|
-          IO.copy(upload.body, f)
-          f.puts "\n"
-        end
+        engine_upload = Learner::Engine::Upload.new(
+          engine_path: learner.path,
+          path: adapter.path,
+          body: upload.body,
+          mode: {
+            "POST"  => Learner::Engine::Upload::Mode::Create,
+            "PATCH" => Learner::Engine::Upload::Mode::Append,
+            "PUT"   => Learner::Engine::Upload::Mode::Replace,
+          }[method],
+        )
+        engine_upload.run
         adapter.run
         learner.training_data = adapter.data
         learner.build

@@ -1,5 +1,6 @@
 require "./engine/json"
 require "./engine/csv_adapter"
+require "./engine/upload"
 require "./engine/classifier"
 require "./engine/base"
 
@@ -32,5 +33,16 @@ module Learner::Engine
       value: vector,
       categories: Learner::Engine::JSON.new(categories).to_vectors,
     )
+  end
+
+  def destroy(engine_id : String, filename : String)
+    engine_path = Learner::Engine::Base.path(engine_id)
+    upload_path = Learner::Engine::CSVAdapter.path(filename)
+    begin
+      File.delete(upload_path)
+      File.delete(engine_path)
+    rescue Errno
+      raise Learner::Engine::FileNotFound.new
+    end
   end
 end

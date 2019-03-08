@@ -30,6 +30,10 @@ class Learner::Engine::CSVAdapter
   end
 
   def path
+    self.class.path(filename)
+  end
+
+  def self.path(filename)
     "#{ROOT_PATH}/uploads/#{filename}.csv"
   end
 end

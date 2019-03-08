@@ -5,4 +5,4 @@
 *.dwarf
 /data/saves/*
 /data/uploads/*
-learner
+/learner

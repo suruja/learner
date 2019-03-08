@@ -21,6 +21,19 @@ patch "/:engine_id/upload" do |env|
   Learner::Web::Helpers.patch_upload(env)
 end
 
+delete "/:engine_id" do |env|
+  engine_id = env.params.url["engine_id"].as(String)
+  filename = Learner::Web::Token.new(
+    value: engine_id,
+    secret: env.params.query["token"],
+  ).to_s
+  Learner::Engine.destroy(
+    engine_id: engine_id,
+    filename: filename,
+  )
+  {body: "OK"}.to_json
+end
+
 get "/:engine_id/run" do |env|
   value = Learner::Engine.run(
     engine_id: env.params.url["engine_id"].as(String),

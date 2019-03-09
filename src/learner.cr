@@ -31,6 +31,7 @@ delete "/:engine_id" do |env|
     engine_id: engine_id,
     filename: filename,
   )
+  env.response.status_code = 202
   {body: "OK"}.to_json
 end
 

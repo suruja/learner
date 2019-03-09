@@ -37,6 +37,7 @@ class Learner::Web::Helpers
         engine_upload.run
         adapter.run
         learner.training_data = adapter.data
+        learner.categories = adapter.categories
         learner.build
         learner.train
         learner.save

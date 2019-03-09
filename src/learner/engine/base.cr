@@ -1,16 +1,18 @@
 require "shainet"
 
 class Learner::Engine::Base
-  property training_data : Array(Vectors)
+  property training_data : Matrix
   property network : SHAInet::Network
   property learning_rate : Float64
   property momentum : Float64
   property filename : String
+  property categories : VectorSet
 
-  def initialize(@filename, @training_data = Array(Vectors).new)
+  def initialize(@filename, @training_data = Matrix.new)
     @learning_rate = 0.7
     @momentum = 0.3
     @network = SHAInet::Network.new
+    @categories = VectorSet.new
   end
 
   def build
@@ -56,10 +58,15 @@ class Learner::Engine::Base
   def load
     raise FileNotFound.new unless persisted?
     network.load_from_file(path)
+    @categories = Learner::Engine::Categories.load(categories_path)
   end
 
   def save
     network.save_to_file(path)
+    Learner::Engine::Categories.save(
+      path: categories_path,
+      data: @categories,
+    )
   end
 
   def path
@@ -70,7 +77,15 @@ class Learner::Engine::Base
     "#{ROOT_PATH}/saves/#{filename}.nn"
   end
 
-  def classify(value : Vector, categories : Vectors)
+  def categories_path
+    self.class.categories_path(filename)
+  end
+
+  def self.categories_path(filename)
+    "#{ROOT_PATH}/saves/#{filename}.ctg"
+  end
+
+  def classify(value : Vector)
     result = run(value)
     classifier = Classifier.new(
       value: result,

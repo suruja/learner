@@ -3,7 +3,7 @@ require "./ruler"
 class Learner::Engine::Classifier
   property value : Vector
   property category : Vector?
-  property categories : Vectors
+  property categories : VectorSet
   property confidence : Float64
 
   def initialize(@value, @categories)

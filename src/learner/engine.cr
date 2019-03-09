@@ -1,6 +1,7 @@
 require "./engine/json"
 require "./engine/csv_adapter"
 require "./engine/upload"
+require "./engine/categories"
 require "./engine/classifier"
 require "./engine/base"
 
@@ -13,6 +14,8 @@ module Learner::Engine
 
   alias Vector = Array(Float64)
   alias Vectors = Array(Vector)
+  alias VectorSet = Set(Vector)
+  alias Matrix = Array(Vectors)
 
   class FileNotFound < ::Exception; end
 
@@ -25,14 +28,11 @@ module Learner::Engine
     learner.run(vector)
   end
 
-  def classify(engine_id : String, value : String, categories : String) : Classifier
+  def classify(engine_id : String, value : String) : Classifier
     learner = Learner::Engine::Base.new(engine_id)
     learner.load
     vector = Learner::Engine::JSON.new(value).to_vector
-    learner.classify(
-      value: vector,
-      categories: Learner::Engine::JSON.new(categories).to_vectors,
-    )
+    learner.classify(vector)
   end
 
   def destroy(engine_id : String, filename : String)

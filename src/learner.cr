@@ -46,7 +46,6 @@ get "/:engine_id/classify" do |env|
   classifier = Learner::Engine.classify(
     engine_id: env.params.url["engine_id"].as(String),
     value: env.params.query.fetch("value", "[]"),
-    categories: env.params.query.fetch("categories", "[]"),
   )
   {
     value:      classifier.category,

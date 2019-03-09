@@ -70,10 +70,10 @@ Run your engine with your `VALUE`.
 -----------------
 
 ```
-GET /:engine_id/classify?value=VALUE&categories=CATEGORIES
+GET /:engine_id/classify?value=VALUE
 ```
 
-Classify your `VALUE` in the `CATEGORIES` you provided.
+Classify your `VALUE` among the categories found in your data.
 
 
 ## Specs

@@ -1,11 +1,13 @@
 class Learner::Engine::CSVAdapter
   property filename : String
-  property data : Array(Vectors)
+  property data : Matrix
+  property categories : VectorSet
   property input_size : Int32
   property output_size : Int32
 
   def initialize(@filename, @input_size, @output_size)
-    @data = Array(Vectors).new
+    @data = Matrix.new
+    @categories = VectorSet.new
   end
 
   def run
@@ -13,20 +15,21 @@ class Learner::Engine::CSVAdapter
       string_or_io: File.read(path),
       separator: ';',
     )
-    @data = parser.parse.reduce(Array(Vectors).new) do |memo, line|
+    result = parser.parse.reduce({data: Matrix.new, categories: VectorSet.new}) do |memo, line|
       if line.size > 0
         vectors = [
           line[0...input_size],
           line[input_size...(input_size + output_size)],
         ]
-        memo << vectors.map do |vector|
-          vector.map do |coord|
-            coord.to_f
-          end
+        memo[:data] << vectors.map do |vector|
+          vector.map { |coord| coord.to_f }
         end
+        memo[:categories] << vectors.last.map { |coord| coord.to_f }
       end
       memo
     end
+    @data = result[:data]
+    @categories = result[:categories]
   end
 
   def path

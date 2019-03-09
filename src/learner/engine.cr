@@ -21,6 +21,28 @@ module Learner::Engine
 
   class IdAlreadyTaken < ::Exception; end
 
+  def build(engine_id : String, filename : String, input_size : Int32, output_size : Int32, body : IO, mode : Learner::Engine::Upload::Mode)
+    learner = Learner::Engine::Base.new(engine_id)
+    adapter = Learner::Engine::CSVAdapter.new(
+      filename: filename,
+      input_size: input_size,
+      output_size: output_size,
+    )
+    engine_upload = Learner::Engine::Upload.new(
+      engine_path: learner.path,
+      path: adapter.path,
+      body: body,
+      mode: mode,
+    )
+    engine_upload.run
+    adapter.run
+    learner.training_data = adapter.data
+    learner.categories = adapter.categories
+    learner.build
+    learner.train
+    learner.save
+  end
+
   def run(engine_id : String, value : String) : Vector
     learner = Learner::Engine::Base.new(engine_id)
     learner.load

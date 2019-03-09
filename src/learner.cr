@@ -9,16 +9,16 @@ before_all do |env|
   env.response.content_type = "application/json"
 end
 
-post "/:engine_id/upload" do |env|
-  Learner::Web::Helpers.post_upload(env)
+post "/:engine_id" do |env|
+  Learner::Web::Helpers.upload(env, "POST")
 end
 
-put "/:engine_id/upload" do |env|
-  Learner::Web::Helpers.put_upload(env)
+put "/:engine_id" do |env|
+  Learner::Web::Helpers.upload(env, "PUT")
 end
 
-patch "/:engine_id/upload" do |env|
-  Learner::Web::Helpers.patch_upload(env)
+patch "/:engine_id" do |env|
+  Learner::Web::Helpers.upload(env, "PATCH")
 end
 
 delete "/:engine_id" do |env|

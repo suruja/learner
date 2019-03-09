@@ -21,7 +21,6 @@ class Learner::Engine::Upload
     end
     File.open(path, (mode == Mode::Append ? "a" : "w")) do |f|
       IO.copy(body, f)
-      f.puts "\n"
     end
   end
 end

@@ -12,7 +12,7 @@ helper.encapsulate do
     it "create new training data" do
       helper.upload(
         method: "POST",
-        resource: "/#{helper.engine_id}/upload?input_size=#{helper.input_size}&output_size=#{helper.output_size}"
+        resource: "/#{helper.engine_id}?input_size=#{helper.input_size}&output_size=#{helper.output_size}"
       ) do |response|
         helper.token = JSON.parse(response.body)["token"].as_s
         response.status_code.should eq(201)
@@ -22,7 +22,7 @@ helper.encapsulate do
     it "update existing training data" do
       helper.upload(
         method: "PUT",
-        resource: "/#{helper.engine_id}/upload?input_size=#{helper.input_size}&output_size=#{helper.output_size}&token=#{helper.token}"
+        resource: "/#{helper.engine_id}?input_size=#{helper.input_size}&output_size=#{helper.output_size}&token=#{helper.token}"
       ) do |response|
         response.status_code.should eq(202)
       end
@@ -31,10 +31,15 @@ helper.encapsulate do
     it "append existing training data" do
       helper.upload(
         method: "PATCH",
-        resource: "/#{helper.engine_id}/upload?input_size=#{helper.input_size}&output_size=#{helper.output_size}&token=#{helper.token}"
+        resource: "/#{helper.engine_id}?input_size=#{helper.input_size}&output_size=#{helper.output_size}&token=#{helper.token}"
       ) do |response|
         response.status_code.should eq(202)
       end
+    end
+
+    it "append existing training data from query string" do
+      patch "/#{helper.engine_id}?input_size=#{helper.input_size}&output_size=#{helper.output_size}&data=#{[[0.0, 1.0, 1.0]].to_json}&token=#{helper.token}"
+      response.status_code.should eq(202)
     end
 
     {

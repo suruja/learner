@@ -24,14 +24,15 @@ crystal run src/learner.cr
 
 Every value must be castable to `Float64`. Either input, output or category must be castable to a vector, aka `Array(Float64)`. Pass your query parameters in JSON format.
 
------------------
+#### CRUD your engine
+
+To create, replace or append your engine training data, you can either upload a CSV file (using `;` as separator) file containing one row per data item, of `INPUT_SIZE` columns, resulting output in the last `OUTPUT_SIZE` columns, or pass your JSON-encoded data in `data` query parameter.
 
 ```
 POST /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE
 ```
 
-Upload a CSV (using ';' as separator) file containing one row per data item, of `INPUT_SIZE` columns, resulting output
-in the last `OUTPUT_SIZE` columns. Once your CSV file is successfully processed, you will get a token.
+Create your engine. Once your data (CSV file or `data` query parameter) is successfully processed, you will get a token you must keep.
 
 -----------------
 
@@ -39,16 +40,7 @@ in the last `OUTPUT_SIZE` columns. Once your CSV file is successfully processed,
 PATCH /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
-Append your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
-in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
-
------------------
-
-```
-PATCH /:engine_id?data=DATA&input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
-```
-
-Append your training data with JSON-encoded `DATA` query parameter, containing one row per data item, of `INPUT_SIZE` columns, resulting output in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
+Append your engine training data, uploading CSV file or passing `data` query parameter. You must provide the creation `TOKEN` as query parameter.
 
 
 -----------------
@@ -57,8 +49,7 @@ Append your training data with JSON-encoded `DATA` query parameter, containing o
 PUT /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
-Replace your training data with a CSV file containing one row per data item, of `INPUT_SIZE` columns, resulting output
-in the last `OUTPUT_SIZE` columns. You must provide the creation `TOKEN` as query parameter.
+Replace your engine training data, uploading CSV file or passing `data` query parameter. You must provide the creation `TOKEN` as query parameter.
 
 -----------------
 
@@ -68,7 +59,8 @@ DELETE /:engine_id?token=TOKEN
 
 Destroy your engine. You must provide the creation `TOKEN` as query parameter.
 
------------------
+
+#### Consume your engine
 
 ```
 GET /:engine_id/run?value=VALUE

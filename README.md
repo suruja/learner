@@ -28,39 +28,45 @@ Every value must be castable to `Float64`. Either input, output or category must
 
 To create, replace or append your engine training data, you can either upload a CSV file (using `;` as separator) file containing one row per data item, of `INPUT_SIZE` columns, resulting output in the last `OUTPUT_SIZE` columns, or pass your JSON-encoded data in `data` query parameter.
 
+##### Create your engine
+
 ```
 POST /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE
 ```
 
-Create your engine. Once your data (CSV file or `data` query parameter) is successfully processed, you will get a token you must keep.
+Once your data (CSV file or `data` query parameter) is successfully processed, you will get a token you must keep.
 
------------------
+
+##### Append your engine training data
 
 ```
 PATCH /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
-Append your engine training data, uploading CSV file or passing `data` query parameter. You must provide the creation `TOKEN` as query parameter.
+Uploading CSV file or pass `data` query parameter. You must provide the creation `TOKEN` as query parameter.
 
 
------------------
+##### Replace your engine training data
 
 ```
 PUT /:engine_id?input_size=INPUT_SIZE&output_size=OUTPUT_SIZE&token=TOKEN
 ```
 
-Replace your engine training data, uploading CSV file or passing `data` query parameter. You must provide the creation `TOKEN` as query parameter.
+Uploading CSV file or pass `data` query parameter. You must provide the creation `TOKEN` as query parameter.
 
------------------
+
+##### Destroy your engine
 
 ```
 DELETE /:engine_id?token=TOKEN
 ```
 
-Destroy your engine. You must provide the creation `TOKEN` as query parameter.
+You must provide the creation `TOKEN` as query parameter.
 
 
 #### Consume your engine
+
+##### Run
 
 ```
 GET /:engine_id/run?value=VALUE
@@ -68,7 +74,7 @@ GET /:engine_id/run?value=VALUE
 
 Run your engine with your `VALUE`.
 
------------------
+##### Classify
 
 ```
 GET /:engine_id/classify?value=VALUE
